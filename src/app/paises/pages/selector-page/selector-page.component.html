@@ -1,0 +1,41 @@
+<div class="mt container" fxLayout="column" fxLayoutGap="20">
+  <h1>Selectores anidados</h1>
+  <mat-divider></mat-divider>
+
+ <div fxLayout="column" fxLayoutAlign="none none">
+   <form [formGroup]="miFormulario" (ngSubmit)="guardar()" >
+    <mat-form-field appearance="fill">
+      <mat-label>Continente</mat-label>
+      <mat-select formControlName="region" (selectionChange)="seleccion()">
+        <mat-option value="">
+         --Seleccione Continente--
+        </mat-option>
+         <mat-option  *ngFor="let region of regiones" [value]="region | lowercase">
+         {{region}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+     <mat-form-field appearance="fill" *ngIf="paises.length>0">
+      <mat-label>Paises</mat-label>
+      <mat-select >
+        <mat-option value="">
+           --Seleccione Pais--
+        </mat-option>
+        <mat-option *ngFor="let pais of paises" [value]="pais.name.common">
+            {{pais.name.common}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+   <div fxLayoutAlign="start start">
+     <button [disabled]="miFormulario.invalid" type="submit" mat-raised-button color="primary">Seleccionar</button>
+   </div>
+  </form>
+ </div>
+
+  <div>
+    <h4>Formulario:</h4>
+    <pre>Valid:{{miFormulario.valid}}</pre>
+    <pre>Value:{{miFormulario.value| json}}</pre>
+  </div>
+</div>

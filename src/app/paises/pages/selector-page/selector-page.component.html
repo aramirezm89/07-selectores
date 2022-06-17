@@ -1,13 +1,17 @@
-<div class="mt container" fxLayout="column" fxLayoutGap="20">
-  <h1>Selectores anidados</h1>
+<div class="container" fxLayout="column" fxLayoutGap="20">
+<div fxLayout="row" fxLayoutAlign="space-between" fxFlexOffset="3" >
+    <h1>Selectores anidados</h1>
+    <mat-spinner *ngIf="cargando" diameter="40"></mat-spinner>
+</div>
   <mat-divider></mat-divider>
 
  <div fxLayout="column" fxLayoutAlign="none none">
    <form [formGroup]="miFormulario" (ngSubmit)="guardar()" >
+   <!--  region -->
     <mat-form-field appearance="fill">
       <mat-label>Continente</mat-label>
-      <mat-select formControlName="region" (selectionChange)="seleccion()">
-        <mat-option value="">
+      <mat-select formControlName="region">
+        <mat-option value="" disabled>
          --Seleccione Continente--
         </mat-option>
          <mat-option  *ngFor="let region of regiones" [value]="region | lowercase">
@@ -15,18 +19,36 @@
         </mat-option>
       </mat-select>
     </mat-form-field>
-     <mat-form-field appearance="fill" *ngIf="paises.length>0">
+   <!--  paises -->
+
+     <mat-form-field appearance="fill"*ngIf="paises.length >0">
       <mat-label>Paises</mat-label>
-      <mat-select >
-        <mat-option value="">
+      <mat-select  formControlName="pais">
+        <mat-option value="" disabled>
            --Seleccione Pais--
         </mat-option>
-        <mat-option *ngFor="let pais of paises" [value]="pais.name.common">
+        <mat-option *ngFor="let pais of paises" [value]="pais.cca3">
             {{pais.name.common}}
         </mat-option>
       </mat-select>
     </mat-form-field>
+    <!-- fronteras -->
 
+     <div fxLayout="column">
+      <span *ngIf="noFrontera">El pais no tiene paises fronterizos.</span>
+     </div>
+
+     <mat-form-field appearance="fill" *ngIf="fronteras.length >0">
+      <mat-label>Paises</mat-label>
+      <mat-select  formControlName="frontera">
+        <mat-option value="" disabled>
+           --Seleccione Pais Fronterizo--
+        </mat-option>
+        <mat-option *ngFor="let frontera of fronteras" [value]="frontera.cca3">
+            {{frontera.name.common}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
    <div fxLayoutAlign="start start">
      <button [disabled]="miFormulario.invalid" type="submit" mat-raised-button color="primary">Seleccionar</button>
    </div>

@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { Pais } from '../interfaces/RegionInterface';
+import { Observable, of } from 'rxjs';
+import {  Pais, PaisBorder } from '../interfaces/PaisInterface';
 
 @Injectable({
   providedIn: 'root',
@@ -15,10 +15,7 @@ export class PaisesService {
     'Oceania',
   ];
   BaseURL: string = 'https://restcountries.com/v3.1';
-  params = new HttpParams().set(
-    'fields',
-    'name,capital,population,cca2,languages,flags,translations'
-  );
+  params = new HttpParams().set('fields', 'name,cca3');
 
   get regiones(): string[] {
     return [...this._regiones];
@@ -26,8 +23,21 @@ export class PaisesService {
 
   constructor(private http: HttpClient) {}
 
-  getRegiones(region: string): Observable<Pais[]> {
+  getPaises(region: string): Observable<Pais[]> {
     const URL = `${this.BaseURL}/region/${region}`;
     return this.http.get<Pais[]>(URL, { params: this.params });
+  }
+
+  getFronteras(pais: string): Observable<PaisBorder[] | null> {
+    if(!pais){
+      return of(null)
+    }
+    const URL = `${this.BaseURL}/alpha/${pais}`;
+    return this.http.get<PaisBorder[]>(URL);
+  }
+
+  getPaisCodigoSmall(paisCodigo:string) : Observable<Pais>{
+     const URL = `${this.BaseURL}/alpha/${paisCodigo}`;
+     return this.http.get<Pais>(URL,{params:this.params})
   }
 }
